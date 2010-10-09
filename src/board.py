@@ -67,18 +67,20 @@ def isValidMoveN(op, np, board):
     if op == np: return 0
 
     # check if same color
-    if isBlackN(op) != isBlack(np): return 0
+    if isBlackN(op) != isBlackN(np): return 0
 
     # check if new place is taken
-    if isPieceAtN(np): return 0
+    if isPieceAtN(np, board): return 0
 
     # check if there is a peice at op
-    if not isPieceAtN(op): return 0
+    if not isPieceAtN(op, board): return 0
 
     # Get the movement direction (scaled)
     direction = [opx - npx, opy -npy]
-    direction = [direction[0]/abs(direction[0]),
-                 direction[1]/abs(direction[1])]
+    if direction[0]:
+        direction[0] = direction[0]/abs(direction[0])
+    if direction[1]:
+        direction[1] = direction[1]/abs(direction[1])
 
     # check if move is horizontal xor vertial (no diaginal)
     if direction[0] ^ direction[1]: return 0
