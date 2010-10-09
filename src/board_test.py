@@ -38,5 +38,13 @@ class TestBoardFunctions(unittest.TestCase):
         rp_board = b.removePeice(0,0,self.board)
         self.assertTrue(not b.removePeice(0,0,rp_board))
 
+    def test_validmove(self):
+        #success
+        # single jump
+        self.assertTrue(b.isValidMove([0,5],[0,3],self.board))
+        # double jump
+        self.assertTrue(b.isValidMove([0,5],[0,1],self.board))
+        #fail out-of-bounds
+
 if __name__ == '__main__':
     unittest.main()
