@@ -115,7 +115,7 @@ def movePieceN(op, np, board):
 
 ### General Board methods ###
 def getFullBoard():
-    return (2**(6**2 + 1) - 1)
+    return (2**(6**2) -1)
 
 def toArray(board):
     board_array = []
@@ -134,7 +134,10 @@ def arrayToBoard(board_array):
     board = 0
     for x in range(len(board_array)):
         for y in range(len(board_array[x])):
-           board += 2**getXY(x,y) 
+            if board_array[x][y]:
+                board += 2**getTileNum(x,y)
+    
+    return board
 
 def toString(board):
     '''Serialize board to string'''
