@@ -33,9 +33,9 @@ def removePeice(x, y, board):
     n = getTileNum(x,y)
     
     if not isPieceAtN(n,board):
-        return 0
+        return board
     else:
-        return board - n
+        return board - 2**n
 
 def isValidMove(old_place, new_place, board):
     op = getTileNum(old_place[0], old_place[1])
