@@ -28,12 +28,22 @@ def whatRow(n):
 def whatCol(n):
     return (n) % SIZE
 
+def nextPiece(x,y,direction):
+    '''
+    returns the tile location in the given direction
+    assumes: -that x,y are correct locations
+             - direction is a unit vector'''
+    return [x + direction[0], y + direction[1]]
+
+def nextPieceN(n, direction):
+    return n + direction[0] + direction[1]*SIZE
+
 ### Player based methods ###
 def removePeice(x, y, board):
     n = getTileNum(x,y)
     
     if not isPieceAtN(n,board):
-        return board
+        return 0
     else:
         return board - 2**n
 
@@ -94,8 +104,14 @@ def movePieceN(op, np, board):
     if not isValidMoveN(op, np, board):
         return 0
 
-    #TODO
-    pass 
+    while(op != np):
+        if isBlackN(np) != isBlackN(op):
+            board ^= op
+        op = nextPeiceN(op)
+    
+    board ^= op
+
+    return 1 
 
 ### General Board methods ###
 def getFullBoard():
@@ -108,6 +124,17 @@ def toArray(board):
         for x in range(SIZE):
             board_array[y].append(isPieceAt(x,y,board))
     return board_array
+
+def arrayToBoard(board_array):
+    
+    #check if board is the right size
+    if not len(board_array)==len(board_array[0])==SIZE:
+        return 0
+
+    board = 0
+    for x in range(len(board_array)):
+        for y in range(len(board_array[x])):
+           board += 2**getXY(x,y) 
 
 def toString(board):
     '''Serialize board to string'''
