@@ -2,8 +2,6 @@
 
 SIZE = 6
 
-
-
 ### Board pieces methods ###
 def isBlack(col,row):
     return (col + row + 1) % 2
@@ -30,6 +28,74 @@ def whatRow(n):
 def whatCol(n):
     return (n) % SIZE
 
+### Player based methods ###
+def removePeice(x, y, board):
+    n = getTileNum(x,y)
+    
+    if not isPieceAtN(n,board):
+        return 0
+    else:
+        return board - n
+
+def isValidMove(old_place, new_place, board):
+    op = getTileNum(old_place[0], old_place[1])
+    np = getTileNum(new_place[0], new_place[1])
+
+    return isValidMoveN(op, np, board)
+
+def isValidMoveN(op, np, board):
+
+    # Get (x,y) for checks
+    opx, opy = getXY(op)
+    npx, npy = getXY(np)
+
+    # check if out of bounds
+    if not(0 <= op < SIZE**2 and 0 <= np < SIZE**2):
+        return 0
+    
+    # check if same place
+    if op == np: return 0
+
+    # check if same color
+    if isBlackN(op) != isBlack(np): return 0
+
+    # check if new place is taken
+    if isPieceAtN(np): return 0
+
+    # check if there is a peice at op
+    if not isPieceAtN(op): return 0
+
+    # Get the movement direction (scaled)
+    direction = [opx - npx, opy -npy]
+    direction = [direction[0]/abs(direction[0]),
+                 direction[1]/abs(direction[1])]
+
+    # check if move is horizontal xor vertial (no diaginal)
+    if direction[0] ^ direction[1]: return 0
+
+    # check if jumping over a opponent's piece
+    if not isPieceAt(opx + direction[0], opy + direction[1]):
+        return 0
+
+    # recursive call if more then one jump
+    if abs(direction[0] + direction[1]) > 1:
+        op = getTileNum(opx + direction[0], opy + direction[1])
+        return isValidMoveN(op, np, board)
+
+    return 1
+    
+def movePiece(old_peice, new_peice, board):
+    op = getTileNum(old_place[0], old_place[1])
+    np = getTileNum(new_place[0], new_place[1])
+
+    return movePieceN(op, np, board)
+
+def movePieceN(op, np, board):
+    if not isValidMoveN(op, np, board):
+        return 0
+
+    #TODO
+    pass 
 
 ### General Board methods ###
 def getFullBoard():
