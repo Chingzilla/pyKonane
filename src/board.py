@@ -122,7 +122,8 @@ def toArray(board):
     for y in range(SIZE):
         board_array.append([])
         for x in range(SIZE):
-            board_array[y].append(isPieceAt(x,y,board))
+            if(isPieceAt(x,y,board)):
+                board_array[y].append(1)
     return board_array
 
 def arrayToBoard(board_array):
