@@ -3,6 +3,16 @@
 SIZE = 6
 
 ### Board pieces methods ###
+def getMask(points):
+    '''returns mask created from the array 'points' '''
+    if type(points) == int:
+        points = [points]
+
+    mask = 0
+    for x in points:
+        mask |= 2**x
+    return mask
+
 def isBlack(col,row):
     return (col + row + 1) % 2
 
@@ -31,13 +41,23 @@ def whatCol(n):
 def nextPiece(x,y,direction):
     '''
     returns the tile location in the given direction
-    assumes: -that x,y are correct locations
+    assumes: - that x,y are correct locations
              - direction is a unit vector
     '''
     return [x + direction[0], y + direction[1]]
 
 def nextPieceN(n, direction):
     return n + direction[0] + direction[1]*SIZE
+
+def getRemoveMask(old, new):
+    points_to_rm = [old]
+    points_not_to_take = [new]
+    direction = getDirectionN(old,new)
+
+    for i in range(1,getDistanceN(old,new)+1,2):
+        points.append((direction[0] + direction[1]*SIZE) +old)
+
+    return getMask(points)
 
 ### Player based methods ###
 def removePeice(x, y, board):
@@ -47,10 +67,6 @@ def removePeice(x, y, board):
         return 0
     else:
         return board - 2**n
-
-def getMoveMask(move):
-    mask = move
-    
 
 def isValidMove(old_place, new_place, board):
     op = getTileNum(old_place[0], old_place[1])
@@ -121,6 +137,9 @@ def movePieceN(op, np, board):
 def getDistance(old_place, new_place):
     return abs(new_place[0] - old_place[0] + new_place[1] - old_place[1])
 
+def getDistanceN(old, new):
+    return getDistance(getXY(old),getXY(new))
+
 def getDirection(old_place, new_place):
     direct_x = new_place[0] - old_place[0]
     direct_y = new_place[1] - old_place[1]
@@ -131,6 +150,9 @@ def getDirection(old_place, new_place):
         direct_y = int(direct_y/abs(direct_y))
 
     return [direct_x, direct_y]
+
+def getDirectionN(old, new):
+    return getDirection(getXY(old), getXY(new))
 
 def getNumOfJumps(old_place, new_place):
     distance = getDistance(old_place, new_place)
