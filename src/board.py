@@ -87,7 +87,12 @@ def checkIfJump(old_n, new_n):
     return 0
 
 def checkIfPlacesTaken(mask, board):
-    pass
+    board = mask & board
+    return mask == board
+
+def checkIfPlacesAvalable(mask, board):
+    board = mask & board
+    return not bool(board)
 
 ## Verify methods ##
 # all verify methods return true if passed
@@ -102,6 +107,19 @@ def isValidMove(old_n, new_n, board):
     if not (checkOutOfBounds(old_n) or checkOutOfBounds(new_n)):
         return 0
 
+    rm_m, mv_m = getMoveMasks(old_n, new_n)
+    # All jump places avaliable?
+    if not checkIfPlacesAvalable(mv_m, board):
+        return 0
+
+    # Are black peices being jumped?
+    if not checkIfPlacesTaken(rm_m, board):
+        return 0
+
+    # All checks passed
+    return 1
+
+
 
 
 #i### Player based methods ###
@@ -112,35 +130,6 @@ def isValidMove(old_n, new_n, board):
 #i        return 0
 #i    else:
 #i        return board - 2**n
-#i
-#idef isValidMove(old_place, new_place, board):
-#i    op = getN(old_place[0], old_place[1])
-#i    np = getN(new_place[0], new_place[1])
-#i
-#i    return isValidMoveN(op, np, board)
-#i
-#idef isValidMoveN(op, np, board):
-#i    if isPieceAtN(np, board): return 0
-#i
-#i    # check if there is a peice at op
-#i    if not isPieceAtN(op, board): return 0
-#i
-#i    # Get the movement direction (scaled)
-#i    direct_x, direct_y = getDirection(opxy,npxy)
-#i
-#i    # check if move is horizontal xor vertial (no diaginal)
-#i    if not (direct_x ^ direct_y): return 0
-#i
-#i    # check if jumping over a opponent's piece
-#i    if not isPieceAt(opxy[0] + direct_x, opxy[1] + direct_y, board):
-#i        return 0
-#i
-#i    # recursive call if more then one jump
-#i    if getNumOfJumps(opxy, npxy) > 1:
-#i        op = getN(opxy[0] + 2 * direct_x, opxy[1] + 2 * direct_y)
-#i        return isValidMoveN(op, np, board)
-#i
-#i    return 1
 #i
 #i### Movement related Methods ###
 #i

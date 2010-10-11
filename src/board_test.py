@@ -87,6 +87,26 @@ class TestBoardFunctions(unittest.TestCase):
         self.assertTrue(not b.checkIfJump(0,6))
         self.assertTrue(not b.checkIfJump(6,11))
 
+    def test_PlacesMaskchecks(self):
+        self.assertTrue(b.checkIfPlacesTaken(1,7))
+        self.assertTrue(b.checkIfPlacesTaken(2,7))
+        self.assertTrue(b.checkIfPlacesTaken(3,7))
+        self.assertTrue(not b.checkIfPlacesTaken(1,0))
+        self.assertTrue(not b.checkIfPlacesTaken(7,3))
+
+        self.assertTrue(b.checkIfPlacesAvalable(4,3))
+        self.assertTrue(b.checkIfPlacesAvalable(5,2))
+        self.assertTrue(not b.checkIfPlacesAvalable(3,2))
+        self.assertTrue(not b.checkIfPlacesAvalable(7,7))
+
+    ## Verify tests ##
+    def test_isValidMove(self):
+        self.assertTrue(b.isValidMove(5,3,self.b_1))
+        self.assertTrue(b.isValidMove(5,1,self.b_1))
+        self.assertTrue(not b.isValidMove(5,0,self.b_1))
+        self.assertTrue(not b.isValidMove(3,5,self.b_1))
+        self.assertTrue(not b.isValidMove(0,2,self.b_1))
+
         
 
 if __name__ == '__main__':
