@@ -119,7 +119,17 @@ def isValidMove(old_n, new_n, board):
     # All checks passed
     return 1
 
+## Player based method ##
+#These methods return modifed boards, 0 if fail
 
+def rmPeice(n, board):
+    mask = getMask(n)
+    board = board ^ mask
+    if board & mask:
+        #error, peice wasn't there
+        return 0
+
+    return board
 
 
 #i### Player based methods ###
