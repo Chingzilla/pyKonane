@@ -61,7 +61,32 @@ class TestBoardFunctions(unittest.TestCase):
         self.assertEqual(b.getDirection(0,0), 0)
 
     def test_getMoveMasks(self):
-        self.assertEqual(b.getMoveMasks(0,2), [m([0,1]), m([2])])
+        self.assertEqual(b.getMoveMasks(0,2), (m([0,1]), m([2])))
+        self.assertEqual(b.getMoveMasks(0,4), (m([0,1,3]), m([2,4])))
+        self.assertEqual(b.getMoveMasks(0,12), (m([0,6]), m([12])))
+        self.assertEqual(b.getMoveMasks(12,0), (m([12,6]), m([0])))
+        self.assertEqual(b.getMoveMasks(0,2), (m([0,1]), m([2])))
+
+    ## Test check methods ##
+    def test_checkOutOfBounds(self):
+        self.assertTrue(b.checkOutOfBounds(5))
+        self.assertTrue(b.checkOutOfBounds(b.SIZE**2 -1))
+        self.assertTrue(not b.checkOutOfBounds(-1))
+        self.assertTrue(not b.checkOutOfBounds(b.SIZE**2))
+        self.assertTrue(not b.checkOutOfBounds(b.SIZE**2 + 4))
+
+    def test_checkIfJump(self):
+        self.assertTrue(b.checkIfJump(0,2))
+        self.assertTrue(b.checkIfJump(2,0))
+        self.assertTrue(b.checkIfJump(2,14))
+        self.assertTrue(b.checkIfJump(35,31))
+        self.assertTrue(not b.checkIfJump(0,0))
+        self.assertTrue(not b.checkIfJump(1,0))
+        self.assertTrue(not b.checkIfJump(5,0))
+        self.assertTrue(not b.checkIfJump(0,7))
+        self.assertTrue(not b.checkIfJump(0,6))
+        self.assertTrue(not b.checkIfJump(6,11))
+
         
 
 if __name__ == '__main__':

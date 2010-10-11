@@ -52,10 +52,13 @@ def isPieceAt(n, board):
 
 def getMoveMasks(old_n,new_n):
     rm_m = [old_n]
-    mv_m = []
+    mv_m = [new_n]
 
     dist = getDist(old_n,new_n)
-    dirct = getDirection(old_n,new_n)
+    direct = getDirection(old_n,new_n)
+
+    if dist==direct==0:
+        return 0,0
 
     for i in range(1, dist):
         point = old_n + i * direct
@@ -65,45 +68,42 @@ def getMoveMasks(old_n,new_n):
             mv_m.append(point)
         else:
             rm_m.append(point)
-    return rm_m, mv_m
+    return getMask(rm_m), getMask(mv_m)
 
-#idef getXY(n):
-#i    return [whatCol(n), whatRow(n)]
-#i    
-#idef isPieceAt(x,y,board):
-#i    n = int(getN(x,y))
-#i    return (int(2**n) & int(board))
-#i
-#idef isPieceAtN(n,board):
-#i    return (getMask(n) & int(board))
-#i
-#idef whatRow(n):
-#i    return (n) / SIZE
-#i
-#idef whatCol(n):
-#i    return (n) % SIZE
-#i
-#idef nextPiece(x,y,direction):
-#i    '''
-#i    returns the tile location in the given direction
-#i    assumes: - that x,y are correct locations
-#i             - direction is a unit vector
-#i    '''
-#i    return [x + direction[0], y + direction[1]]
-#i
-#idef nextPieceN(n, direction):
-#i    return n + direction[0] + direction[1]*SIZE
-#i
-#idef getRemoveMask(old, new):
-#i    points_to_rm = [old]
-#i    points_not_to_take = [new]
-#i    direction = getDirectionN(old,new)
-#i
-#i    for i in range(1,getDistanceN(old,new)+1,2):
-#i        points.append((direction[0] + direction[1]*SIZE) +old)
-#i
-#i    return getMask(points)
-#i
+def getXY(n):
+    return [n/SIZE, n%SIZE]
+
+## Checks ##
+# all checks return true if passed
+
+def checkOutOfBounds(n):
+    return bool(0 <= n < SIZE**2)
+
+def checkIfJump(old_n, new_n):
+    '''Checks if the jump is an even number, and that it is a move'''
+    dist = getDist(old_n, new_n)
+    if dist % 2 == 0 and dist !=0:
+        return 1
+    return 0
+
+def checkIfPlacesTaken(mask, board):
+    pass
+
+## Verify methods ##
+# all verify methods return true if passed
+
+def isValidMove(old_n, new_n, board):
+    
+    # Proper Jump? (also checks if same color and that not same place)
+    if not checkIfJump(old_n, new_n):
+        return 0
+
+    # In bounds?
+    if not (checkOutOfBounds(old_n) or checkOutOfBounds(new_n)):
+        return 0
+
+
+
 #i### Player based methods ###
 #idef removePeice(x, y, board):
 #i    n = getN(x,y)
@@ -120,22 +120,6 @@ def getMoveMasks(old_n,new_n):
 #i    return isValidMoveN(op, np, board)
 #i
 #idef isValidMoveN(op, np, board):
-#i
-#i    # Get (x,y) for checks
-#i    opxy = getXY(op)
-#i    npxy = getXY(np)
-#i
-#i    # check if out of bounds
-#i    if not(0 <= op < SIZE**2 and 0 <= np < SIZE**2):
-#i        return 0
-#i    
-#i    # check if same place
-#i    if op == np: return 0
-#i
-#i    # check if same color
-#i    if isBlackN(op) != isBlackN(np): return 0
-#i
-#i    # check if new place is taken
 #i    if isPieceAtN(np, board): return 0
 #i
 #i    # check if there is a peice at op
