@@ -61,8 +61,8 @@ def isValidMove(old_place, new_place, board):
 def isValidMoveN(op, np, board):
 
     # Get (x,y) for checks
-    opx, opy = getXY(op)
-    npx, npy = getXY(np)
+    opxy = getXY(op)
+    npxy = getXY(np)
 
     # check if out of bounds
     if not(0 <= op < SIZE**2 and 0 <= np < SIZE**2):
@@ -81,26 +81,24 @@ def isValidMoveN(op, np, board):
     if not isPieceAtN(op, board): return 0
 
     # Get the movement direction (scaled)
-    direction = [npx - opx, npy - opx]
-    if direction[0]:
-        direct_x = int(direction[0]//abs(direction[0]))
-    if direction[1]:
-        direct_y = int(direction[1]//abs(direction[1]))
+    direct_x, direct_y = getDirection(opxy,npxy)
 
     # check if move is horizontal xor vertial (no diaginal)
     if not (direct_x ^ direct_y): return 0
 
     # check if jumping over a opponent's piece
-    if not isPieceAt(opx + direct_x, opy + direct_y, board):
+    if not isPieceAt(opxy[0] + direct_x, opxy[1] + direct_y, board):
         return 0
 
     # recursive call if more then one jump
-    if abs(direction[0] + direction[1]) > 1:
-        op = getTileNum(opx + direction[0], opy + direction[1])
+    if getNumOfJumps(opxy, npxy) > 1:
+        op = getTileNum(opxy[0] + 2 * direct_x, opxy[1] + 2 * direct_y)
         return isValidMoveN(op, np, board)
 
     return 1
-    
+
+### Movement related Methods ###
+
 def movePiece(old_peice, new_peice, board):
     op = getTileNum(old_place[0], old_place[1])
     np = getTileNum(new_place[0], new_place[1])
@@ -119,6 +117,27 @@ def movePieceN(op, np, board):
     board ^= op
 
     return 1 
+
+def getDistance(old_place, new_place):
+    return abs(new_place[0] - old_place[0] + new_place[1] - old_place[1])
+
+def getDirection(old_place, new_place):
+    direct_x = new_place[0] - old_place[0]
+    direct_y = new_place[1] - old_place[1]
+    
+    if direct_x:
+        direct_x = int(direct_x/abs(direct_x))
+    if direct_y:
+        direct_y = int(direct_y/abs(direct_y))
+
+    return [direct_x, direct_y]
+
+def getNumOfJumps(old_place, new_place):
+    distance = getDistance(old_place, new_place)
+    if distance % 2:
+        return 0
+    return abs(distance / 2)
+
 
 ### General Board methods ###
 def getFullBoard():

@@ -12,11 +12,11 @@ class TestBoardFunctions(unittest.TestCase):
         b.SIZE = 6
 
         self.board_array = [[1, 0, 1, 0, 1, 1],
-                      [1, 1, 1, 1, 1, 1], 
-                      [1, 1, 0, 1, 1, 1], 
-                      [1, 1, 0, 1, 1, 1], 
-                      [1, 1, 1, 1, 1, 1], 
-                      [1, 1, 1, 1, 1, 1]]
+                            [1, 1, 1, 1, 1, 1], 
+                            [1, 1, 0, 1, 1, 1], 
+                            [1, 1, 0, 1, 1, 1], 
+                            [1, 1, 1, 1, 1, 1], 
+                            [1, 1, 1, 1, 1, 1]]
 
         self.board = b.arrayToBoard(self.board_array)
         
@@ -41,7 +41,29 @@ class TestBoardFunctions(unittest.TestCase):
         self.assertTrue(not b.removePeice(0,0,rp_board))
 
     def test_validMove(self):
-        #print b.toString(self.board)
+        #fail
+        ##out of bounds
+        self.assertTrue(not b.isValidMoveN(-1,3,self.board))
+        self.assertTrue(not b.isValidMoveN(3, b.SIZE**2 + 1,self.board))
+        ##same place
+        self.assertTrue(not b.isValidMoveN(5,5,self.board))
+        ##(not)same color
+        self.assertTrue(not b.isValidMoveN(5,6,self.board))
+        ## new place taken
+        self.assertTrue(not b.isValidMoveN(0,2,self.board))
+
+        ## old place empty
+        self.assertTrue(not b.isValidMoveN(1,3,self.board))
+
+        ## move diaginal
+        self.assertTrue(not b.isValidMoveN(8,1,self.board))
+        
+        ## don't jump over opponete
+        self.assertTrue(not b.isValidMoveN(8,20,self.board))
+
+        ##
+
+        
         #success
         # single jump
         self.assertTrue(b.isValidMove([5,0],[3,0],self.board))
