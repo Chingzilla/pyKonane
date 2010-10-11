@@ -4,161 +4,192 @@ SIZE = 6
 
 ### Board pieces methods ###
 def getMask(points):
-    '''returns mask created from the array 'points' '''
+    '''returns mask created from the n values'''
     if type(points) == int:
-        points = [points]
+        return int(2**points)
 
     mask = 0
     for x in points:
         mask |= 2**x
-    return mask
+    return int(mask)
 
-def isBlack(col,row):
-    return (col + row + 1) % 2
-
-def isBlackN(n):
-    return (sum(getXY(n)) + 1) % 2
-
-def getXY(n):
-    return [whatCol(n), whatRow(n)]
-    
-def getTileNum(col,row):
+def getN(col, row):
     return col + row * SIZE
 
-def isPieceAt(x,y,board):
-    n = int(getTileNum(x,y))
-    return (int(2**n) & int(board))
+def isBlack(n):
+    return not ( n + (n / SIZE) % 2 ) % 2
 
-def isPieceAtN(n,board):
-    return (2**n & int(board))
+def getDist(old_n, new_n):
+    diff = abs(new_n - old_n)
+    if diff < SIZE:
+        return diff
 
-def whatRow(n):
-    return (n) / SIZE
-
-def whatCol(n):
-    return (n) % SIZE
-
-def nextPiece(x,y,direction):
-    '''
-    returns the tile location in the given direction
-    assumes: - that x,y are correct locations
-             - direction is a unit vector
-    '''
-    return [x + direction[0], y + direction[1]]
-
-def nextPieceN(n, direction):
-    return n + direction[0] + direction[1]*SIZE
-
-def getRemoveMask(old, new):
-    points_to_rm = [old]
-    points_not_to_take = [new]
-    direction = getDirectionN(old,new)
-
-    for i in range(1,getDistanceN(old,new)+1,2):
-        points.append((direction[0] + direction[1]*SIZE) +old)
-
-    return getMask(points)
-
-### Player based methods ###
-def removePeice(x, y, board):
-    n = getTileNum(x,y)
+    if not diff % SIZE:
+        return diff / SIZE
     
-    if not isPieceAtN(n,board):
+    return 0
+
+def getDirection(old_n, new_n):
+    '''Returns the direction as an Int,
+    {1,-1} if left/right
+    {SIZE, -SIZE} if up/down
+    {0} if on diginal or same place'''
+    if old_n == new_n:
         return 0
-    else:
-        return board - 2**n
-
-def isValidMove(old_place, new_place, board):
-    op = getTileNum(old_place[0], old_place[1])
-    np = getTileNum(new_place[0], new_place[1])
-
-    return isValidMoveN(op, np, board)
-
-def isValidMoveN(op, np, board):
-
-    # Get (x,y) for checks
-    opxy = getXY(op)
-    npxy = getXY(np)
-
-    # check if out of bounds
-    if not(0 <= op < SIZE**2 and 0 <= np < SIZE**2):
-        return 0
+    diff = new_n - old_n
+    sign = diff / abs(diff)
+    if abs(diff) < SIZE:
+        return sign
     
-    # check if same place
-    if op == np: return 0
+    if not diff % SIZE:
+        return sign * SIZE
 
-    # check if same color
-    if isBlackN(op) != isBlackN(np): return 0
+    return 0
 
-    # check if new place is taken
-    if isPieceAtN(np, board): return 0
+def isPieceAt(n, board):
+    mask = getMask(n)
+    return bool((mask & board) == mask) 
 
-    # check if there is a peice at op
-    if not isPieceAtN(op, board): return 0
 
-    # Get the movement direction (scaled)
-    direct_x, direct_y = getDirection(opxy,npxy)
 
-    # check if move is horizontal xor vertial (no diaginal)
-    if not (direct_x ^ direct_y): return 0
-
-    # check if jumping over a opponent's piece
-    if not isPieceAt(opxy[0] + direct_x, opxy[1] + direct_y, board):
-        return 0
-
-    # recursive call if more then one jump
-    if getNumOfJumps(opxy, npxy) > 1:
-        op = getTileNum(opxy[0] + 2 * direct_x, opxy[1] + 2 * direct_y)
-        return isValidMoveN(op, np, board)
-
-    return 1
-
-### Movement related Methods ###
-
-def movePiece(old_peice, new_peice, board):
-    op = getTileNum(old_place[0], old_place[1])
-    np = getTileNum(new_place[0], new_place[1])
-
-    return movePieceN(op, np, board)
-
-def movePieceN(op, np, board):
-    if not isValidMoveN(op, np, board):
-        return 0
-
-    while(op != np):
-        if isBlackN(np) != isBlackN(op):
-            board ^= op
-        op = nextPeiceN(op)
-    
-    board ^= op
-
-    return 1 
-
-def getDistance(old_place, new_place):
-    return abs(new_place[0] - old_place[0] + new_place[1] - old_place[1])
-
-def getDistanceN(old, new):
-    return getDistance(getXY(old),getXY(new))
-
-def getDirection(old_place, new_place):
-    direct_x = new_place[0] - old_place[0]
-    direct_y = new_place[1] - old_place[1]
-    
-    if direct_x:
-        direct_x = int(direct_x/abs(direct_x))
-    if direct_y:
-        direct_y = int(direct_y/abs(direct_y))
-
-    return [direct_x, direct_y]
-
-def getDirectionN(old, new):
-    return getDirection(getXY(old), getXY(new))
-
-def getNumOfJumps(old_place, new_place):
-    distance = getDistance(old_place, new_place)
-    if distance % 2:
-        return 0
-    return abs(distance / 2)
+#------------
+#idef getXY(n):
+#i    return [whatCol(n), whatRow(n)]
+#i    
+#idef isPieceAt(x,y,board):
+#i    n = int(getN(x,y))
+#i    return (int(2**n) & int(board))
+#i
+#idef isPieceAtN(n,board):
+#i    return (getMask(n) & int(board))
+#i
+#idef whatRow(n):
+#i    return (n) / SIZE
+#i
+#idef whatCol(n):
+#i    return (n) % SIZE
+#i
+#idef nextPiece(x,y,direction):
+#i    '''
+#i    returns the tile location in the given direction
+#i    assumes: - that x,y are correct locations
+#i             - direction is a unit vector
+#i    '''
+#i    return [x + direction[0], y + direction[1]]
+#i
+#idef nextPieceN(n, direction):
+#i    return n + direction[0] + direction[1]*SIZE
+#i
+#idef getRemoveMask(old, new):
+#i    points_to_rm = [old]
+#i    points_not_to_take = [new]
+#i    direction = getDirectionN(old,new)
+#i
+#i    for i in range(1,getDistanceN(old,new)+1,2):
+#i        points.append((direction[0] + direction[1]*SIZE) +old)
+#i
+#i    return getMask(points)
+#i
+#i### Player based methods ###
+#idef removePeice(x, y, board):
+#i    n = getN(x,y)
+#i    
+#i    if not isPieceAtN(n,board):
+#i        return 0
+#i    else:
+#i        return board - 2**n
+#i
+#idef isValidMove(old_place, new_place, board):
+#i    op = getN(old_place[0], old_place[1])
+#i    np = getN(new_place[0], new_place[1])
+#i
+#i    return isValidMoveN(op, np, board)
+#i
+#idef isValidMoveN(op, np, board):
+#i
+#i    # Get (x,y) for checks
+#i    opxy = getXY(op)
+#i    npxy = getXY(np)
+#i
+#i    # check if out of bounds
+#i    if not(0 <= op < SIZE**2 and 0 <= np < SIZE**2):
+#i        return 0
+#i    
+#i    # check if same place
+#i    if op == np: return 0
+#i
+#i    # check if same color
+#i    if isBlackN(op) != isBlackN(np): return 0
+#i
+#i    # check if new place is taken
+#i    if isPieceAtN(np, board): return 0
+#i
+#i    # check if there is a peice at op
+#i    if not isPieceAtN(op, board): return 0
+#i
+#i    # Get the movement direction (scaled)
+#i    direct_x, direct_y = getDirection(opxy,npxy)
+#i
+#i    # check if move is horizontal xor vertial (no diaginal)
+#i    if not (direct_x ^ direct_y): return 0
+#i
+#i    # check if jumping over a opponent's piece
+#i    if not isPieceAt(opxy[0] + direct_x, opxy[1] + direct_y, board):
+#i        return 0
+#i
+#i    # recursive call if more then one jump
+#i    if getNumOfJumps(opxy, npxy) > 1:
+#i        op = getN(opxy[0] + 2 * direct_x, opxy[1] + 2 * direct_y)
+#i        return isValidMoveN(op, np, board)
+#i
+#i    return 1
+#i
+#i### Movement related Methods ###
+#i
+#idef movePiece(old_peice, new_peice, board):
+#i    op = getN(old_place[0], old_place[1])
+#i    np = getN(new_place[0], new_place[1])
+#i
+#i    return movePieceN(op, np, board)
+#i
+#idef movePieceN(op, np, board):
+#i    if not isValidMoveN(op, np, board):
+#i        return 0
+#i
+#i    while(op != np):
+#i        if isBlackN(np) != isBlackN(op):
+#i            board ^= op
+#i        op = nextPeiceN(op)
+#i    
+#i    board ^= op
+#i
+#i    return 1 
+#i
+#idef getDistance(old_place, new_place):
+#i    return abs(new_place[0] - old_place[0] + new_place[1] - old_place[1])
+#i
+#idef getDistanceN(old, new):
+#i    return getDistance(getXY(old),getXY(new))
+#i
+#idef getDirection(old_place, new_place):
+#i    direct_x = new_place[0] - old_place[0]
+#i    direct_y = new_place[1] - old_place[1]
+#i    
+#i    if direct_x:
+#i        direct_x = int(direct_x/abs(direct_x))
+#i    if direct_y:
+#i        direct_y = int(direct_y/abs(direct_y))
+#i
+#i    return [direct_x, direct_y]
+#i
+#idef getDirectionN(old, new):
+#i    return getDirection(getXY(old), getXY(new))
+#i
+#idef getNumOfJumps(old_place, new_place):
+#i    distance = getDistance(old_place, new_place)
+#i    if distance % 2:
+#i        return 0
+#i    return abs(distance / 2)
 
 
 ### General Board methods ###
@@ -170,7 +201,7 @@ def toArray(board):
     for y in range(SIZE):
         board_array.append([])
         for x in range(SIZE):
-            if(isPieceAt(x,y,board)):
+            if(isPieceAt(getN(x,y),board)):
                 board_array[y].append(1)
             else:
                 board_array[y].append(0)
@@ -186,7 +217,7 @@ def arrayToBoard(board_array):
     for y in range(len(board_array)):
         for x in range(len(board_array[y])):
             if board_array[y][x]:
-                board += 2**getTileNum(x,y)
+                board += 2**getN(x,y)
     
     return board
 
@@ -206,7 +237,7 @@ def toString(board):
         for y in range(len(board)):
             string += '  '
             if board[x][y]:
-                if isBlack(x,y):
+                if isBlack(getN(x,y)):
                     string += 'b'
                 else:
                     string += 'w'
