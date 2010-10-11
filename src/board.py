@@ -16,11 +16,11 @@ def getTileNum(col,row):
     return col + row * SIZE
 
 def isPieceAt(x,y,board):
-    n = getTileNum(x,y)
-    return (2**n & board)
+    n = int(getTileNum(x,y))
+    return (int(2**n) & int(board))
 
 def isPieceAtN(n,board):
-    return (2**n & board)
+    return (2**n & int(board))
 
 def whatRow(n):
     return (n) / SIZE
@@ -32,7 +32,8 @@ def nextPiece(x,y,direction):
     '''
     returns the tile location in the given direction
     assumes: -that x,y are correct locations
-             - direction is a unit vector'''
+             - direction is a unit vector
+    '''
     return [x + direction[0], y + direction[1]]
 
 def nextPieceN(n, direction):
@@ -46,6 +47,10 @@ def removePeice(x, y, board):
         return 0
     else:
         return board - 2**n
+
+def getMoveMask(move):
+    mask = move
+    
 
 def isValidMove(old_place, new_place, board):
     op = getTileNum(old_place[0], old_place[1])
@@ -76,17 +81,17 @@ def isValidMoveN(op, np, board):
     if not isPieceAtN(op, board): return 0
 
     # Get the movement direction (scaled)
-    direction = [opx - npx, opy -npy]
+    direction = [npx - opx, npy - opx]
     if direction[0]:
-        direction[0] = direction[0]/abs(direction[0])
+        direct_x = int(direction[0]//abs(direction[0]))
     if direction[1]:
-        direction[1] = direction[1]/abs(direction[1])
+        direct_y = int(direction[1]//abs(direction[1]))
 
     # check if move is horizontal xor vertial (no diaginal)
-    if direction[0] ^ direction[1]: return 0
+    if not (direct_x ^ direct_y): return 0
 
     # check if jumping over a opponent's piece
-    if not isPieceAt(opx + direction[0], opy + direction[1]):
+    if not isPieceAt(opx + direct_x, opy + direct_y, board):
         return 0
 
     # recursive call if more then one jump
@@ -126,18 +131,20 @@ def toArray(board):
         for x in range(SIZE):
             if(isPieceAt(x,y,board)):
                 board_array[y].append(1)
+            else:
+                board_array[y].append(0)
     return board_array
 
 def arrayToBoard(board_array):
-    
+    '''Takes array in form array[y][x]'''
     #check if board is the right size
     if not len(board_array)==len(board_array[0])==SIZE:
         return 0
 
     board = 0
-    for x in range(len(board_array)):
-        for y in range(len(board_array[x])):
-            if board_array[x][y]:
+    for y in range(len(board_array)):
+        for x in range(len(board_array[y])):
+            if board_array[y][x]:
                 board += 2**getTileNum(x,y)
     
     return board

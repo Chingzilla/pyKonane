@@ -11,15 +11,17 @@ class TestBoardFunctions(unittest.TestCase):
     def setUp(self):
         b.SIZE = 6
 
-        self.board = [[1, 0, 1, 0, 1, 1],
+        self.board_array = [[1, 0, 1, 0, 1, 1],
                       [1, 1, 1, 1, 1, 1], 
                       [1, 1, 0, 1, 1, 1], 
                       [1, 1, 0, 1, 1, 1], 
                       [1, 1, 1, 1, 1, 1], 
                       [1, 1, 1, 1, 1, 1]]
 
-        self.board = board.arrayToBoard(self.board)
-    
+        self.board = b.arrayToBoard(self.board_array)
+        
+        #print b.toString(self.board)
+
     def test_isBlack(self):
         #test isBlack
         self.assertTrue(b.isBlack(0,0))
@@ -38,12 +40,13 @@ class TestBoardFunctions(unittest.TestCase):
         rp_board = b.removePeice(0,0,self.board)
         self.assertTrue(not b.removePeice(0,0,rp_board))
 
-    def test_validmove(self):
+    def test_validMove(self):
+        #print b.toString(self.board)
         #success
         # single jump
-        self.assertTrue(b.isValidMove([0,5],[0,3],self.board))
+        self.assertTrue(b.isValidMove([5,0],[3,0],self.board))
         # double jump
-        self.assertTrue(b.isValidMove([0,5],[0,1],self.board))
+        self.assertTrue(b.isValidMove([5,0],[1,0],self.board))
         #fail out-of-bounds
 
 if __name__ == '__main__':
