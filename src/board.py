@@ -50,9 +50,23 @@ def isPieceAt(n, board):
     mask = getMask(n)
     return bool((mask & board) == mask) 
 
+def getMoveMasks(old_n,new_n):
+    rm_m = [old_n]
+    mv_m = []
 
+    dist = getDist(old_n,new_n)
+    dirct = getDirection(old_n,new_n)
 
-#------------
+    for i in range(1, dist):
+        point = old_n + i * direct
+        
+        #If odd hop, remove peice
+        if not i % 2:
+            mv_m.append(point)
+        else:
+            rm_m.append(point)
+    return rm_m, mv_m
+
 #idef getXY(n):
 #i    return [whatCol(n), whatRow(n)]
 #i    

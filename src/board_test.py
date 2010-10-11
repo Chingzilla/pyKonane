@@ -60,6 +60,8 @@ class TestBoardFunctions(unittest.TestCase):
         self.assertEqual(b.getDirection(6,0), -b.SIZE)
         self.assertEqual(b.getDirection(0,0), 0)
 
+    def test_getMoveMasks(self):
+        self.assertEqual(b.getMoveMasks(0,2), [m([0,1]), m([2])])
         
 
 if __name__ == '__main__':
