@@ -2,6 +2,10 @@
 
 SIZE = 6
 
+COLOR = {'white': 0,
+         'black': 1,
+        }
+
 ### Board pieces methods ###
 def getMask(points):
     '''returns mask created from the n values'''
@@ -30,10 +34,12 @@ def getDist(old_n, new_n):
     return 0
 
 def getDirection(old_n, new_n):
-    '''Returns the direction as an Int,
+    '''
+    Returns the direction as an Int,
     {1,-1} if left/right
     {SIZE, -SIZE} if up/down
-    {0} if on diginal or same place'''
+    {0} if on diginal or same place
+    '''
     if old_n == new_n:
         return 0
     diff = new_n - old_n
@@ -50,6 +56,23 @@ def isPieceAt(n, board):
     mask = getMask(n)
     return bool((mask & board) == mask) 
 
+def getRelitiveN(org_n, rel_col, rel_row):
+    '''
+    Returns the n value of piece relitive to give piece
+    Returns -1 if invalid move
+    '''
+    org_col, org_row = getXY(org_n)
+    
+    new_col = org_col + rel_col
+    new_row = org_row + rel_row
+
+    if not 0 <= new_col < SIZE:
+        return -1
+    if not 0 <= new_row < SIZE:
+        return -1
+
+    return getN(new_col, new_row)
+
 def getMoveMasks(old_n,new_n):
     rm_m = [old_n]
     mv_m = [new_n]
@@ -63,7 +86,7 @@ def getMoveMasks(old_n,new_n):
     for i in range(1, dist):
         point = old_n + i * direct
         
-        #If odd hop, remove peice
+        #If odd hop, remove piece
         if not i % 2:
             mv_m.append(point)
         else:
@@ -71,7 +94,39 @@ def getMoveMasks(old_n,new_n):
     return getMask(rm_m), getMask(mv_m)
 
 def getXY(n):
-    return [n/SIZE, n%SIZE]
+    '''returns place in form [col,row]'''
+    return [n%SIZE, n/SIZE]
+
+def getListOfPieces(board_m):
+    '''Returns list of pieces on the board'''
+    pieces = []
+    for n in range(SIZE**2):
+        if board_m & 2**n:
+            pieces.append(n)
+    return pieces
+
+def getValidMovies(board_m, n):
+    '''returns a list about'''
+    directions
+    pieces = []
+    #TODO
+    return pieces
+
+def getValidMoviesInDirect(board_m, n, direction):
+    '''returns all movies in the given direction'''
+    pieces_m = []
+    #TODO
+    return pieces_m
+
+def getListOfMovies(board_m):
+    '''
+    returns a list of movies for both red and black pieces
+    '''
+    board_empty_spaces = board_m ^ getFullBoard()
+    empty_spaces = getListOfPieces(board_empty_spaces)
+    #TODO
+    pass
+    
 
 ## Checks ##
 # all checks return true if passed
@@ -104,7 +159,9 @@ def isValidMove(old_n, new_n, board):
         return 0
 
     # In bounds?
-    if not (checkOutOfBounds(old_n) or checkOutOfBounds(new_n)):
+    if not checkOutOfBounds(old_n):
+        return 0
+    if not checkOutOfBounds(new_n):
         return 0
 
     rm_m, mv_m = getMoveMasks(old_n, new_n)
@@ -119,6 +176,32 @@ def isValidMove(old_n, new_n, board):
     # All checks passed
     return 1
 
+def isValidRemoveBlack(n):
+    #Add the corners
+    valid_set = [0]
+    valid_set.append(getN(SIZE-1,SIZE-1))
+    #Add inner square
+    valid_set.append(getN((SIZE-1)/2,(SIZE-1)/2))
+    valid_set.append(getN(SIZE/2,SIZE/2))
+    
+    return bool(n in valid_set)
+
+def isValidRemoveWhite(n,black_n):
+    if n < 0:
+        return 0
+
+    if not isValidRemoveBlack(black_n):
+        return 0
+    
+    white_squares = []
+    white_squares.append(getRelitiveN(black_n,-1,0))
+    white_squares.append(getRelitiveN(black_n,1,0))
+    white_squares.append(getRelitiveN(black_n,0,-1))
+    white_squares.append(getRelitiveN(black_n,0,1))
+
+    return bool(n in white_squares)
+
+
 ## Player based method ##
 #These methods return modifed boards, 0 if fail
 
@@ -130,63 +213,6 @@ def rmPeice(n, board):
         return 0
 
     return board
-
-
-#i### Player based methods ###
-#idef removePeice(x, y, board):
-#i    n = getN(x,y)
-#i    
-#i    if not isPieceAtN(n,board):
-#i        return 0
-#i    else:
-#i        return board - 2**n
-#i
-#i### Movement related Methods ###
-#i
-#idef movePiece(old_peice, new_peice, board):
-#i    op = getN(old_place[0], old_place[1])
-#i    np = getN(new_place[0], new_place[1])
-#i
-#i    return movePieceN(op, np, board)
-#i
-#idef movePieceN(op, np, board):
-#i    if not isValidMoveN(op, np, board):
-#i        return 0
-#i
-#i    while(op != np):
-#i        if isBlackN(np) != isBlackN(op):
-#i            board ^= op
-#i        op = nextPeiceN(op)
-#i    
-#i    board ^= op
-#i
-#i    return 1 
-#i
-#idef getDistance(old_place, new_place):
-#i    return abs(new_place[0] - old_place[0] + new_place[1] - old_place[1])
-#i
-#idef getDistanceN(old, new):
-#i    return getDistance(getXY(old),getXY(new))
-#i
-#idef getDirection(old_place, new_place):
-#i    direct_x = new_place[0] - old_place[0]
-#i    direct_y = new_place[1] - old_place[1]
-#i    
-#i    if direct_x:
-#i        direct_x = int(direct_x/abs(direct_x))
-#i    if direct_y:
-#i        direct_y = int(direct_y/abs(direct_y))
-#i
-#i    return [direct_x, direct_y]
-#i
-#idef getDirectionN(old, new):
-#i    return getDirection(getXY(old), getXY(new))
-#i
-#idef getNumOfJumps(old_place, new_place):
-#i    distance = getDistance(old_place, new_place)
-#i    if distance % 2:
-#i        return 0
-#i    return abs(distance / 2)
 
 
 ### General Board methods ###

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #src/board_test.py
 
 import unittest
@@ -30,6 +31,13 @@ class TestBoardFunctions(unittest.TestCase):
     def test_getN(self):
         self.assertEqual(b.getN(5,0), 5)
         self.assertEqual(b.getN(1,7), 1 + 7*6)
+
+    def test_getXY(self):
+        self.assertEqual(b.getXY(13),[1,2])
+        self.assertEqual(b.getXY(2),[2,0])
+        self.assertEqual(b.getXY(35),[5,5])
+        self.assertEqual(b.getXY(25),[1,4])
+        self.assertEqual(b.getXY(6),[0,1])
 
     def test_isBlack(self):
         #test isBlack
@@ -67,6 +75,19 @@ class TestBoardFunctions(unittest.TestCase):
         self.assertEqual(b.getMoveMasks(12,0), (m([12,6]), m([0])))
         self.assertEqual(b.getMoveMasks(0,2), (m([0,1]), m([2])))
 
+    def test_getListOfPieces(self):
+        self.assertEqual(b.getListOfPieces(11), [0,1,3])
+        self.assertEqual(b.getListOfPieces(16), [4])
+
+    def test_getRelitiveN(self):
+        self.assertEqual(b.getRelitiveN(6,1,0),7)
+        self.assertEqual(b.getRelitiveN(6,0,1),12)
+        self.assertEqual(b.getRelitiveN(35,-1,-5),4)
+        #Test invalid input
+        self.assertEqual(b.getRelitiveN(5,1,0),-1)
+        self.assertEqual(b.getRelitiveN(32,0,1),-1)
+        
+    
     ## Test check methods ##
     def test_checkOutOfBounds(self):
         self.assertTrue(b.checkOutOfBounds(5))
@@ -107,7 +128,34 @@ class TestBoardFunctions(unittest.TestCase):
         self.assertTrue(not b.isValidMove(3,5,self.b_1))
         self.assertTrue(not b.isValidMove(0,2,self.b_1))
 
-        
+    def test_isValidRemoveBlack(self):
+        self.assertTrue(b.isValidRemoveBlack(0))
+        self.assertTrue(b.isValidRemoveBlack(21))
+        self.assertTrue(b.isValidRemoveBlack(14))
+        self.assertTrue(b.isValidRemoveBlack(35))
+
+        self.assertTrue(not b.isValidRemoveBlack(2))
+        self.assertTrue(not b.isValidRemoveBlack(32))
+
+    def test_isValidRemoveWhite(self):
+        self.assertTrue(b.isValidRemoveWhite(1,0))
+        self.assertTrue(b.isValidRemoveWhite(6,0))
+
+        self.assertTrue(b.isValidRemoveWhite(15,14))
+        self.assertTrue(b.isValidRemoveWhite(13,14))
+        self.assertTrue(b.isValidRemoveWhite(8,14))
+        self.assertTrue(b.isValidRemoveWhite(20,14))
+
+        self.assertTrue(b.isValidRemoveWhite(22,21))
+        self.assertTrue(b.isValidRemoveWhite(20,21))
+        self.assertTrue(b.isValidRemoveWhite(15,21))
+        self.assertTrue(b.isValidRemoveWhite(27,21))
+
+        self.assertTrue(b.isValidRemoveWhite(34,35))
+        self.assertTrue(b.isValidRemoveWhite(29,35))
+
+        self.assertTrue(not b.isValidRemoveWhite(1,35))
+        self.assertTrue(not b.isValidRemoveWhite(3,9))
 
 if __name__ == '__main__':
     unittest.main()
