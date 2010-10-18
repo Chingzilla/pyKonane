@@ -1,13 +1,25 @@
 #src/board.py
 
+global SIZE
 SIZE = 6
 
 COLOR = {'white': 0,
          'black': 1,
         }
 
-#Used to store the know board's weights
+# Used to store the know board's weights
+# Data type is: [moves_black, moves_white, heuristic_black, heuristic_white]
 known_boards ={}
+
+def changeBoardSize(size):
+    #Check if valid board
+    global SIZE
+
+    if 4 > size or size%2:
+        SIZE = 6
+    else:
+        print "Changed Board Size to {0}x{0}".format(size)
+        SIZE = size
 
 ### Board pieces methods ###
 def getMask(points):
@@ -158,9 +170,9 @@ def getListOfMoves(board_m):
         else:
             valid_boards_white += boards
         
-    known_boards[board_m] = [valid_boards_black, valid_boards_white]
+    known_boards[board_m] = [valid_boards_black, valid_boards_white, None, None]
 
-    return [valid_boards_black, valid_boards_white]
+    return known_boards[board_m]
 
 ## Checks ##
 # all checks return true if passed

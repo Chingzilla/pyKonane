@@ -40,19 +40,18 @@ class Player_Random(Player):
     '''
     Player that plays randomly
     '''
-    #@overide
     def removePiece(self, g_board, black_n=None):
         if self.color == 'black':
             choice = random.choice(board.getBlackRemoves())
         else:
             choice = random.choice(board.getWhiteRemoves(black_n))
         
-        print "{0} player removes {1}".format(self.color, choice)
+        #print "{0} player removes {1}".format(self.color, choice)
         return choice
-
+    
     def movePiece(self, g_board):
-        print "Random {0} player's turn ----".format(self.color)
-        print board.toString(g_board)
+        #print "Random {0} player's turn ----".format(self.color)
+        #print board.toString(g_board)
 
         choices = board.getListOfMoves(g_board)
         if self.color == 'black':
@@ -61,6 +60,71 @@ class Player_Random(Player):
             choices = choices[1]
         
         return random.choice(choices)
+
+class Player_MinMax(Player):
+    '''
+    Player that plays with MinMax
+    Black = Max player = 0
+    White = Min player = 1
+    '''
+    def __init__(self, color, depth=None):
+        self.color = color
+        if depth == None:
+            depth = int(raw_input("Max depth >>>"))
+        self.depth = depth
+
+def minmax_Decision(state):
+    state = board.getListOfMoves(state)
+
+    if state[1] != None:
+        return state[player + 2]
+
+    num_moves_mine = len(state[player])
+    num_moves_theirs = len(state[not player])
+    
+    value = num_moves_mine - num_moves_theirs
+    
+    # weight results if at terminal
+    if num_moves_theirs == 0:
+        value += 50
+        state[player + 2] = value
+
+    return value
+
+def minmax_Max(board, depth):
+    actions = getListOfMoves(board)[0]
+    # See if at terminal node or max depth
+    if depth >= MAX_DEPTH or getListOfMoves(board)[1] == 0:
+        return minmax_Decision(board, player)
+    
+    v = -float('int')
+    depth += 1
+    for a in acitons:
+        v_temp = minmax_Max(a,int(not player), depth)
+        if v_temp > v:
+            v = v_temp
+    return v
+
+def minmax_Min(board, depth):
+
+def getHeuristicBlack(current_board):
+    board.getListOfMoves(current_board)
+    
+    current_board = board.known_boards[current_board]
+
+    num_of_black_moves, num_of_white_moves = board.getListOfMoves(board)[0:1]
+    num_of_black_moves = len(num_of_black_moves)
+    mun_of_white_moves = len(num_of_white_moves)
+    
+    # Weight results
+    if num_of_black_moves == 0 and turns_color == "white":
+        num_of_white_moves += 100
+    elif num_of_white_moves == 0 and turn_color == "black":
+        num_of_black_moves += 100
+
+    heuristic = num_of_black_moves - num_of_white_moves
+
+    return
 
 def promptForPiece(prompt):
     input = raw_input(str(prompt) + " >>> ")

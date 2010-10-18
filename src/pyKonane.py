@@ -11,7 +11,11 @@ class Game:
     '''
     Stores a game instance
     '''
-    def __init__(self):
+    def __init__(self,size=None,player_1=None,player_2=None):
+        #setboard size
+        changeBoardSize(int(raw_input("Size of Board? ")))
+        print SIZE
+
         self.b = getFullBoard()
         
         self.player_1 = getPlayer('black','1')
@@ -23,7 +27,11 @@ class Game:
         piece = self.player_2.removePiece(self.b, piece)
         self.b = rmPiece(piece, self.b)
 
+        rounds = 0
+
         while(1):
+            rounds += 1
+            
             self.turn(self.player_1)
             #Does White Have moves?
             if not getListOfMoves(self.b)[1]:
@@ -36,7 +44,9 @@ class Game:
                 print "--- White Player Wins!!! ---"
                 break
 
-        print toString(self.b)
+        #print toString(self.b)
+        print "Game ended in {0} rounds.".format(rounds)
+        print "Number of Boards looked at: {0}".format(len(known_boards))
         sys.exit(0)
 
     def turn(self, player):
