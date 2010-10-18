@@ -1,0 +1,264 @@
+6
+Player Type for black pieces
+0 - Real Player
+1 - Randomn Player
+Player Type for white pieces
+0 - Real Player
+1 - Randomn Player
+black player removes 21
+white player removes 27
+Random black player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|  b  w  b  w  b  w
+  1|  w  b  w  b  w  b
+  2|  b  w  b  w  b  w
+  3|  w  b  w     w  b
+  4|  b  w  b     b  w
+  5|  w  b  w  b  w  b
+Random white player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|  b  w  b  w  b  w
+  1|  w  b  w     w  b
+  2|  b  w  b     b  w
+  3|  w  b  w  b  w  b
+  4|  b  w  b     b  w
+  5|  w  b  w  b  w  b
+Random black player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|  b  w  b  w  b  w
+  1|  w  b  w     w  b
+  2|  b        w  b  w
+  3|  w  b  w  b  w  b
+  4|  b  w  b     b  w
+  5|  w  b  w  b  w  b
+Random white player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|  b  w  b  w  b  w
+  1|  w  b  w     w  b
+  2|  b     b  w  b  w
+  3|  w  b     b  w  b
+  4|  b  w        b  w
+  5|  w  b  w  b  w  b
+Random black player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|  b  w  b  w  b  w
+  1|  w  b  w     w  b
+  2|  b  w  b  w  b  w
+  3|  w        b  w  b
+  4|  b           b  w
+  5|  w  b  w  b  w  b
+Random white player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|  b  w  b  w  b  w
+  1|  w  b  w  b  w  b
+  2|  b  w  b     b  w
+  3|  w           w  b
+  4|  b           b  w
+  5|  w  b  w  b  w  b
+Random black player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|  b  w  b  w  b  w
+  1|  w  b  w  b  w  b
+  2|  b  w  b  w      
+  3|  w           w  b
+  4|  b           b  w
+  5|  w  b  w  b  w  b
+Random white player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|  b  w  b  w  b  w
+  1|  w  b  w  b  w  b
+  2|  b  w        b   
+  3|  w           w  b
+  4|  b           b  w
+  5|  w  b  w  b  w  b
+Random black player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|  b  w  b  w  b  w
+  1|  w  b  w  b  w  b
+  2|  b  w        b   
+  3|  w           w   
+  4|     w        b  w
+  5|  w  b  w  b  w  b
+Random white player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|  b  w  b  w  b  w
+  1|  w  b  w  b  w  b
+  2|  b  w        b   
+  3|  w  b        w   
+  4|              b  w
+  5|  w     w  b  w  b
+Random black player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|  b  w  b  w  b  w
+  1|  w  b  w  b  w  b
+  2|  b  w     w      
+  3|              w   
+  4|              b  w
+  5|  w     w  b  w  b
+Random white player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|  b  w  b  w  b  w
+  1|  w  b  w  b  w  b
+  2|        b  w      
+  3|              w   
+  4|              b  w
+  5|  w     w  b  w  b
+Random black player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|  b  w  b  w  b  w
+  1|  w  b  w  b  w  b
+  2|        b  w      
+  3|              w   
+  4|           w      
+  5|  w     w  b  w  b
+Random white player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|  b  w  b  w     w
+  1|  w  b  w  b     b
+  2|        b  w  b   
+  3|              w   
+  4|           w      
+  5|  w     w  b  w  b
+Random black player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|  b  w  b  w      
+  1|  w  b  w  b      
+  2|        b  w  b  w
+  3|              w   
+  4|           w      
+  5|  w     w  b  w  b
+Random white player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|  b  w        b   
+  1|  w  b  w  b      
+  2|        b  w  b  w
+  3|              w   
+  4|           w      
+  5|  w     w  b  w  b
+Random black player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|  b  w     w      
+  1|        w  b      
+  2|        b  w  b  w
+  3|              w   
+  4|           w      
+  5|  w     w  b  w  b
+Random white player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|        b  w      
+  1|        w  b      
+  2|        b  w  b  w
+  3|              w   
+  4|           w      
+  5|  w     w  b  w  b
+Random black player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|        b  w      
+  1|        w  b      
+  2|        b  w  b  w
+  3|              w   
+  4|           w     w
+  5|              w  b
+Random white player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|        b  w      
+  1|     b            
+  2|        b  w  b  w
+  3|              w   
+  4|           w     w
+  5|              w  b
+Random black player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|     w            
+  1|     b            
+  2|        b  w  b  w
+  3|              w   
+  4|           w     w
+  5|              w  b
+Random white player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|     w            
+  1|     b            
+  2|        b  w     w
+  3|                  
+  4|           w  b  w
+  5|              w  b
+Random black player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|     w            
+  1|     b            
+  2|        b  w     w
+  3|                  
+  4|           w      
+  5|  w           w  b
+Random white player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|     w            
+  1|     b            
+  2|              b  w
+  3|                  
+  4|           w      
+  5|  w           w  b
+Random black player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|                  
+  1|                  
+  2|     w        b  w
+  3|                  
+  4|           w      
+  5|  w           w  b
+Random white player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|                  
+  1|                  
+  2|     w        b  w
+  3|                  
+  4|           w      
+  5|  w        b      
+Random black player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|                  
+  1|                  
+  2|     w     w      
+  3|                  
+  4|           w      
+  5|  w        b      
+Random white player's turn ----
+      0  1  2  3  4  5
+    ------------------
+  0|                  
+  1|                  
+  2|     w     w      
+  3|           b      
+  4|                  
+  5|  w               
+--- White Player Wins!!! ---
+Game ended in 14 rounds.
+Number of Boards looked at: 29
