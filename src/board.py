@@ -105,18 +105,35 @@ def getListOfPieces(board_m):
             pieces.append(n)
     return pieces
 
-def getValidMovies(board_m, n):
-    '''returns a list about'''
-    directions
-    pieces = []
-    #TODO
-    return pieces
-
 def getValidMoviesInDirect(board_m, n, direction):
-    '''returns all movies in the given direction'''
-    pieces_m = []
-    #TODO
-    return pieces_m
+    '''
+    returns all movies in the given direction
+    n is an empty space
+    '''
+    valid_boards = []
+    m = n
+    while(1):
+        m += direction * 2
+        board_move = mvPiece(m, n, board_m)
+        if board_move == -1:
+            break
+        if board_move != -2:
+            valid_boards.append(board_move)
+
+    return valid_boards
+
+def getValidMovies(board_m, n):
+    '''
+    returns a list about
+    n is an empty space
+    '''
+    directions = [-1,1,-SIZE,SIZE]
+    valid_boards = []
+
+    for d in directions:
+        valid_boards += getValidMoviesInDirect(board_m, n, d)
+
+    return valid_boards
 
 def getListOfMovies(board_m):
     '''
@@ -124,9 +141,18 @@ def getListOfMovies(board_m):
     '''
     board_empty_spaces = board_m ^ getFullBoard()
     empty_spaces = getListOfPieces(board_empty_spaces)
-    #TODO
-    pass
     
+    valid_boards_white = []
+    valid_boards_black = []
+    
+    for n in empty_spaces:
+        boards = getValidMovies(board_m, n)
+        if isBlack(n):
+            valid_boards_black += boards
+        else:
+            valid_boards_white += boards
+        
+    return valid_boards_black, valid_boards_white
 
 ## Checks ##
 # all checks return true if passed
@@ -176,15 +202,30 @@ def isValidMove(old_n, new_n, board):
     # All checks passed
     return 1
 
-def isValidRemoveBlack(n):
-    #Add the corners
-    valid_set = [0]
-    valid_set.append(getN(SIZE-1,SIZE-1))
+def getBlackRemoves():
+    valid_black = []
+    #Add corners
+    valid_black.append(0)
+    valid_black.append(getN(SIZE-1,SIZE-1))
     #Add inner square
-    valid_set.append(getN((SIZE-1)/2,(SIZE-1)/2))
-    valid_set.append(getN(SIZE/2,SIZE/2))
+    valid_black.append(getN((SIZE-1)/2,(SIZE-1)/2))
+    valid_black.append(getN(SIZE/2,SIZE/2))
     
-    return bool(n in valid_set)
+    return valid_black
+
+def getWhiteRemoves(black_n):
+    valid_white = []
+
+    valid_directions = [[-1,0], [1,0], [0,-1], [0,1]]
+    for v_d in valid_directions:
+        next_n = getRelitiveN(black_n, v_d[0], v_d[1])
+        if next_n != -1:
+            valid_white.append(next_n)
+    
+    return valid_white
+
+def isValidRemoveBlack(n):
+    return bool(n in getBlackRemoves())
 
 def isValidRemoveWhite(n,black_n):
     if n < 0:
@@ -192,32 +233,62 @@ def isValidRemoveWhite(n,black_n):
 
     if not isValidRemoveBlack(black_n):
         return 0
-    
-    white_squares = []
-    white_squares.append(getRelitiveN(black_n,-1,0))
-    white_squares.append(getRelitiveN(black_n,1,0))
-    white_squares.append(getRelitiveN(black_n,0,-1))
-    white_squares.append(getRelitiveN(black_n,0,1))
 
-    return bool(n in white_squares)
+    return bool(n in getWhiteRemoves(black_n))
 
 
 ## Player based method ##
-#These methods return modifed boards, 0 if fail
+#These methods return modifed boards, -1 if fail
 
-def rmPeice(n, board):
-    mask = getMask(n)
-    board = board ^ mask
-    if board & mask:
-        #error, peice wasn't there
-        return 0
+def rmPiece(n, board):
+    if not isPieceAt(n,board):
+        return -1
 
+    return board - getMask(n)
+
+def mvPiece(old_n, new_n, board):
+    '''
+    returns board after move
+    returns -1 if error
+    returns -2 if starting point is empty
+    '''
+    direction = getDirection(old_n, new_n)
+    if direction == 0: return -1
+
+    #IS piece out of bounds?
+    if not (0 <= old_n < SIZE**2):
+        return -1
+    if not (0 <= new_n < SIZE**2):
+        return -1
+
+    #Is there a piece to move?
+    if not isPieceAt(old_n, board):
+        return -2
+
+    #Pick up piece
+    board -= getMask(old_n)
+    
+    while(old_n != new_n):
+        #Is there a piece to jump?
+        old_n += direction 
+        if not isPieceAt(old_n, board):
+            return -1
+        #remove piece
+        board -= getMask(old_n)
+
+        #Is the next piece open?
+        old_n += direction
+        if isPieceAt(old_n, board):
+            return -1
+    
+    #Place piece back on the board
+    board += getMask(new_n)
+    
     return board
-
 
 ### General Board methods ###
 def getFullBoard():
-    return (2**(6**2) -1)
+    return (2**(SIZE**2) -1)
 
 def toArray(board):
     board_array = []

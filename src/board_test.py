@@ -15,15 +15,61 @@ class TestBoardFunctions(unittest.TestCase):
     def setUp(self):
         b.SIZE = 6
 
-        self.board_array = [[1, 0, 1, 0, 1, 1],
-                            [1, 1, 1, 1, 1, 1], 
-                            [1, 1, 0, 1, 1, 1], 
-                            [1, 1, 0, 1, 1, 1], 
-                            [1, 1, 1, 1, 1, 1], 
-                            [1, 1, 1, 1, 1, 1]]
+        board_array = [[1, 0, 1, 0, 1, 1],
+                       [1, 1, 1, 1, 1, 1], 
+                       [1, 1, 0, 1, 1, 1], 
+                       [1, 1, 0, 1, 1, 1], 
+                       [1, 1, 1, 1, 1, 1], 
+                       [1, 1, 1, 1, 1, 1]]
 
-        self.b_1 = b.arrayToBoard(self.board_array)
+        self.b_1 = b.arrayToBoard(board_array)
+
+        self.m_1_1 = b.mvPiece(5,3,self.b_1)
+        self.m_1_2 = b.mvPiece(5,1,self.b_1)
+        self.m_1_3 = b.mvPiece(b.getN(1,2), b.getN(1,0), self.b_1)
         
+
+    def test_getValidMoviesInDirect(self):
+        self.assertEqual(b.getValidMoviesInDirect(self.b_1, 1, 1), [self.m_1_2])
+
+    def test_getValidMovies(self):
+        self.assertEqual(b.getValidMovies(self.b_1, 1), [b.mvPiece(5,1,self.b_1), b.mvPiece(13,1,self.b_1)])
+        
+        
+    def test_getListOfMovies(self):
+
+        board_array = [[1, 1, 1, 1, 1, 1],
+                       [1, 1, 1, 1, 1, 1], 
+                       [1, 1, 0, 1, 1, 1], 
+                       [1, 1, 0, 1, 1, 1], 
+                       [1, 1, 1, 1, 1, 1], 
+                       [1, 1, 1, 1, 1, 1]]
+
+        self.b_2 = b.arrayToBoard(board_array)
+
+        m_2_1 = b.mvPiece(b.getN(2,0), b.getN(2,2), self.b_2)
+        m_2_2 = b.mvPiece(b.getN(0,2), b.getN(2,2), self.b_2)
+        m_2_3 = b.mvPiece(b.getN(4,2), b.getN(2,2), self.b_2)
+        m_2_4 = b.mvPiece(b.getN(0,3), b.getN(2,3), self.b_2)
+        m_2_5 = b.mvPiece(b.getN(2,5), b.getN(2,3), self.b_2)
+        m_2_6 = b.mvPiece(b.getN(4,3), b.getN(2,3), self.b_2)
+
+        moves_2_w = [m_2_4, m_2_5, m_2_6].sort()
+        moves_2_b = [m_2_1, m_2_2, m_2_3].sort()
+
+        moves_2 = b.getListOfMovies(self.b_2)
+        moves_2 = [moves_2[0].sort(), moves_2[1].sort()]
+
+        self.assertEqual(moves_2, [moves_2_b, moves_2_w])
+
+    def test_mvPiece(self):
+        self.b_1 = b.getMask([0,1,3])
+        self.assertEqual(b.mvPiece(0,2,self.b_1),b.getMask([3,2]))
+        
+        new_board = b.mvPiece(0,4, self.b_1)
+        #print b.toString(new_board)
+        self.assertEqual(new_board,b.getMask(4))
+    
     def test_getMask(self):
         self.assertEqual(b.getMask(5), 2**5)
         self.assertEqual(b.getMask([0,1]), 3)
