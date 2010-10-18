@@ -13,13 +13,13 @@ class Game:
     '''
     def __init__(self,size=None,player_1=None,player_2=None):
         #setboard size
-        changeBoardSize(int(raw_input("Size of Board? ")))
+        #changeBoardSize(int(raw_input("Size of Board? ")))
         print SIZE
 
         self.b = getFullBoard()
         
-        self.player_1 = getPlayer('black','1')
-        self.player_2 = getPlayer('white','1')
+        self.player_1 = getPlayer('black')
+        self.player_2 = getPlayer('white')
 
         piece = self.player_1.removePiece(self.b)
         self.b = rmPiece(piece, self.b)
@@ -52,18 +52,28 @@ class Game:
     def turn(self, player):
         self.b = player.movePiece(self.b)
 
-def getPlayer(color,p_type=None):
-    print "Player Type for {0} pieces".format(color)
-    print "0 - Real Player"
-    print "1 - Randomn Player"
+def getPlayer(color,p_type=None, max_depth=None):
 
     if p_type == None:
+        print "Player Type for {0} pieces".format(color)
+        print "0 - Real Player"
+        print "1 - Randomn Player"
+        print "2 - MinMax Player"
+        print "3 - MinMax w/alpha-beta pruning Player"
         p_type = raw_input(' >>> ')
 
     if p_type == '0':
         return player.Player(color)
     if p_type == '1':
         return player.Player_Random(color)
+    if p_type == '2':
+        if max_depth == None:
+            max_depth = int(raw_input('Max Depth >>>'))
+        return player.Player_MinMax(color, max_depth)
+    if p_type == '3':
+        if max_depth == None:
+            max_depth = int(raw_input('Max Depth >>>'))
+        return player.Player_AlphaBeta(color, max_depth)
 
     print "Incorrect Option"
     return getPlayer(color)
