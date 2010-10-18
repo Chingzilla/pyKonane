@@ -1,5 +1,7 @@
 # src/player.py
 
+import random
+
 import board
 from board import COLOR
 
@@ -33,6 +35,32 @@ class Player(object):
             if new_board != -1 and COLOR[self.color] == board.isBlack(old_piece):
                 return new_board
             print "Invalid Move"
+
+class Player_Random(Player):
+    '''
+    Player that plays randomly
+    '''
+    #@overide
+    def removePiece(self, g_board, black_n=None):
+        if self.color == 'black':
+            choice = random.choice(board.getBlackRemoves())
+        else:
+            choice = random.choice(board.getWhiteRemoves(black_n))
+        
+        print "{0} player removes {1}".format(self.color, choice)
+        return choice
+
+    def movePiece(self, g_board):
+        print "Random {0} player's turn ----".format(self.color)
+        print board.toString(g_board)
+
+        choices = board.getListOfMoves(g_board)
+        if self.color == 'black':
+            choices = choices[0]
+        else:
+            choices = choices[1]
+        
+        return random.choice(choices)
 
 def promptForPiece(prompt):
     input = raw_input(str(prompt) + " >>> ")

@@ -14,8 +14,8 @@ class Game:
     def __init__(self):
         self.b = getFullBoard()
         
-        self.player_1 = getPlayer('black','0')
-        self.player_2 = getPlayer('white','0')
+        self.player_1 = getPlayer('black','1')
+        self.player_2 = getPlayer('white','1')
 
         piece = self.player_1.removePiece(self.b)
         self.b = rmPiece(piece, self.b)
@@ -25,7 +25,19 @@ class Game:
 
         while(1):
             self.turn(self.player_1)
+            #Does White Have moves?
+            if not getListOfMoves(self.b)[1]:
+                print "--- Black Player Wins!!! ---"
+                break
+
             self.turn(self.player_2)
+            #Does Black Have moves?
+            if not getListOfMoves(self.b)[0]:
+                print "--- White Player Wins!!! ---"
+                break
+
+        print toString(self.b)
+        sys.exit(0)
 
     def turn(self, player):
         self.b = player.movePiece(self.b)
@@ -33,12 +45,15 @@ class Game:
 def getPlayer(color,p_type=None):
     print "Player Type for {0} pieces".format(color)
     print "0 - Real Player"
+    print "1 - Randomn Player"
 
     if p_type == None:
         p_type = raw_input(' >>> ')
 
     if p_type == '0':
         return player.Player(color)
+    if p_type == '1':
+        return player.Player_Random(color)
 
     print "Incorrect Option"
     return getPlayer(color)

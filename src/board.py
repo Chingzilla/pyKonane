@@ -6,6 +6,9 @@ COLOR = {'white': 0,
          'black': 1,
         }
 
+#Used to store the know board's weights
+known_boards ={}
+
 ### Board pieces methods ###
 def getMask(points):
     '''returns mask created from the n values'''
@@ -135,10 +138,13 @@ def getValidMovies(board_m, n):
 
     return valid_boards
 
-def getListOfMovies(board_m):
+def getListOfMoves(board_m):
     '''
     returns a list of movies for both red and black pieces
     '''
+    if known_boards.has_key(board_m):
+        return known_boards[board_m]
+
     board_empty_spaces = board_m ^ getFullBoard()
     empty_spaces = getListOfPieces(board_empty_spaces)
     
@@ -152,7 +158,9 @@ def getListOfMovies(board_m):
         else:
             valid_boards_white += boards
         
-    return valid_boards_black, valid_boards_white
+    known_boards[board_m] = [valid_boards_black, valid_boards_white]
+
+    return [valid_boards_black, valid_boards_white]
 
 ## Checks ##
 # all checks return true if passed
