@@ -1,0 +1,27 @@
+./README
+pyKonane
+Christopher Ching
+
+This is my project submition for
+CSCI 446 Project 1:
+MinMax Search for Konane
+
+Currently the nether of the MinMax agents successfully expand their action trees.
+The choice hueistic has been written and basic tests have been performed
+Random AI works
+All Verify methods have been fully tested
+All get and verify methods in board.py have tests in board_test.py
+
+
+./
+./README        this file
+./run           symoblic link to src/pyKonane.py, execute to start game
+
+./data/         storage of example output from program
+
+./src/
+./src/board.py      modual for working with board objects
+./src/board_test.py test class to verify board.py functions are correct
+./src/player.py     modual used to store player
+./src/pyKonane.py   main game class, execute to start game
+
